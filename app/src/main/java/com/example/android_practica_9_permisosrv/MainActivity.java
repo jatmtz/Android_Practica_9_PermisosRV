@@ -19,6 +19,9 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
 
     private static final int REQUEST_IMAGE_CAPTURE = 3;
+    static final int REQUEST_STORAGE_PERMISSION = 4;
+    private static final int REQUEST_CODE_SELECCIONAR_ARCHIVO = 5;
+
     List<ListElement> elements;
     private static final int REQUEST_CALL_PERMISSION = 1;
     private static final int REQUEST_CAMERA_PERMISSION = 2;
@@ -36,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
         elements = new ArrayList<>();
         elements.add(new ListElement("Permiso para llamadas"));
         elements.add(new ListElement("Permiso para cámara"));
-        elements.add(new ListElement("Permiso para bla bla"));
+        elements.add(new ListElement("Permiso para almacenamiento"));
 
         Adapter Adapter = new Adapter(elements, this);
         RecyclerView rc = findViewById(R.id.rvPermisos);
@@ -70,6 +73,18 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    private void abrirSelectorDeArchivos() {
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        intent.setType("*/*");
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+
+        try {
+            startActivityForResult(intent, REQUEST_CODE_SELECCIONAR_ARCHIVO);
+        } finally {
+
+        }
+    }
+
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -82,9 +97,14 @@ public class MainActivity extends AppCompatActivity {
             } else if (requestCode == REQUEST_CAMERA_PERMISSION) {
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     if (elements.equals("Permiso para llamadas")) {
-                       abrirCamara();
+                        abrirCamara();
                     }
                 }
+            }
+              else  if (requestCode == REQUEST_STORAGE_PERMISSION) {
+                    if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                        abrirSelectorDeArchivos();
+                    }
             }
         }
     }

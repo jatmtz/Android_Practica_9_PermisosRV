@@ -28,6 +28,8 @@ public class Adapter extends RecyclerView.Adapter<Adapter.viewHolder> {
     private static final int REQUEST_CALL_PERMISSION = 1;
     private static final int REQUEST_CAMERA_PERMISSION = 2;
 
+    private static final int REQUEST_STORAGE_PERMISSION = 4;
+
     public Adapter(List<ListElement> itemList, Context context){
         this.minflater = LayoutInflater.from(context);
         this.context = context;
@@ -68,6 +70,11 @@ public class Adapter extends RecyclerView.Adapter<Adapter.viewHolder> {
                             ActivityCompat.requestPermissions((Activity) holder.sw_activo.getContext(), new String[]{Manifest.permission.CAMERA}, REQUEST_CAMERA_PERMISSION);
                         }
                     }
+                    else if (element.permiso.equals("Permiso para almacenamiento")) {
+                        if (ActivityCompat.checkSelfPermission(holder.sw_activo.getContext(), Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                            ActivityCompat.requestPermissions((Activity) holder.sw_activo.getContext(), new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, REQUEST_STORAGE_PERMISSION);
+                        }
+                    }
                 }
             }
         });
@@ -89,13 +96,12 @@ public class Adapter extends RecyclerView.Adapter<Adapter.viewHolder> {
         public CompoundButton sw_activo;
         TextView permiso;
 
-        Button btnswitch;
 
         //Contructor
          viewHolder(@NonNull View itemView) {
             super(itemView);
-            permiso = itemView.findViewById(R.id.permiso);
-            btnswitch = itemView.findViewById(R.id.btnswitch);
+             permiso = itemView.findViewById(R.id.permiso);
+             sw_activo = itemView.findViewById(R.id.btnswitch);
         }
 
         public void bindData(final ListElement item) {
