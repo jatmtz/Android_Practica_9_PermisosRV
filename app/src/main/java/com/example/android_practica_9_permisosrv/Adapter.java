@@ -60,7 +60,7 @@ public class Adapter extends RecyclerView.Adapter<Adapter.viewHolder> {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
-                    // El usuario activó el switch, solicita el permiso correspondiente
+
                     if (element.permiso.equals("Permiso para llamadas")) {
                         if (ActivityCompat.checkSelfPermission(holder.sw_activo.getContext(), Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
                             ActivityCompat.requestPermissions((Activity) holder.sw_activo.getContext(), new String[]{Manifest.permission.CALL_PHONE}, REQUEST_CALL_PERMISSION);
@@ -79,7 +79,6 @@ public class Adapter extends RecyclerView.Adapter<Adapter.viewHolder> {
             }
         });
 
-        // Establece el estado del switch en función del valor almacenado en el modelo
         holder.sw_activo.setChecked(element.switchState);
     }
 

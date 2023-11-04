@@ -32,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         init();
+
     }
 
     public void init() {
@@ -58,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED) {
             startActivity(intent);
         } else {
-            Toast.makeText(this, "Necesitas otorgar permiso para realizar llamadas.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Se necesita otorgar permiso para realizar llamadas.", Toast.LENGTH_SHORT).show();
         }
     }
     private void abrirCamara() {
@@ -69,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
             startActivityForResult(intent, REQUEST_IMAGE_CAPTURE);
         } else {
 
-            Toast.makeText(this, "Necesitas otorgar permiso para acceder a la cámara.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Se necesita otorgar permiso para acceder a la cámara.", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -85,20 +86,25 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+
+    private boolean todosPermisos() {
+        return ActivityCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED &&
+                ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED &&
+                ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
+    }
+
+
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
         if (requestCode == REQUEST_CALL_PERMISSION) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                if (elements.equals("Permiso para llamadas")) {
                     realizarLlamada();
-                }
+
             } else if (requestCode == REQUEST_CAMERA_PERMISSION) {
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    if (elements.equals("Permiso para llamadas")) {
                         abrirCamara();
-                    }
                 }
             }
               else  if (requestCode == REQUEST_STORAGE_PERMISSION) {
@@ -107,5 +113,10 @@ public class MainActivity extends AppCompatActivity {
                     }
             }
         }
+        if (todosPermisos()) {
+            Intent intent = new Intent(MainActivity.this, Todos.class);
+            startActivity(intent);
+        }
+
     }
 }
